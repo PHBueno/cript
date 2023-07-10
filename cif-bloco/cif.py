@@ -29,7 +29,7 @@ def ascii(blocos: list) -> dict:  # Transforma os caracteres em seus respectivos
     return m
 
 
-def blocos_cifra(chave: list, bloco: list):  # Cifra os dados em blocos de 64 bits
+def blocos_cifra(chave: list, bloco: list) -> dict:  # Cifra os dados em blocos de 64 bits
     _ascii = ascii(bloco)
     c = dict()
     for b in range(0, len(_ascii)):
@@ -47,13 +47,14 @@ if __name__ == '__main__':
     chave = [int(input(f"Ch[{i}]: ")) for i in range(0, 8)]
     msg = str(input("\nMensagem a ser cifrada: ")).lower().replace(' ', '-')
     cifra = blocos_cifra(chave=chave, bloco=bloco(msg))
+    print(f"Bloco: {bloco(msg)}")
 
     print("\n-=" * len(cifra))
     print("Mensagem cifrada: ")
     for l in cifra:
         for i in cifra[l]:
             print(f'{i}', end=' ')
-    print(en,"-=" * len(cifra))
+    print("-=" * len(cifra))
 
 
 
