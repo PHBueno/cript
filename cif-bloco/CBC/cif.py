@@ -5,7 +5,7 @@
 qnt_bytes_bloco = 8
 
 
-def bloco_incompleto(qnt_bytes_blc_incompl: int, msg: str):  # , vi: list, chave: list):
+def bloco_incompleto(qnt_bytes_blc_incompl: int, msg: str):
     blc = {'0': list()}
     _msg = msg
     for i in range(0, qnt_bytes_blc_incompl):
@@ -18,7 +18,7 @@ def bloco_incompleto(qnt_bytes_blc_incompl: int, msg: str):  # , vi: list, chave
     return _msg, blc
 
 
-def bloco(qnt_bytes_blc_incompl: int, msg: str):
+def bloco(qnt_bytes_blc_incompl: int, msg: str) -> dict:
     _msg = msg
     inicio = fim = count = 0
     blc = {}
@@ -36,17 +36,27 @@ def bloco(qnt_bytes_blc_incompl: int, msg: str):
     return blc
 
 
-def cifra(chave: list, vetor_inicial: list, msg: str, qnt_bytes_blc_incompl: int):
+def cifra(chave: list, vetor_inicial: list, msg: str, qnt_bytes_blc_incompl: int) -> dict:
     blocos_cif = {}
     blocos = bloco(msg=msg, qnt_bytes_blc_incompl=qnt_bytes_blc_incompl)
     for b in blocos:
         blocos_cif[b] = list()
+        # print(f"BLOCO: {b}")
         for i in range(0, len(blocos[str(b)])):
+            # print(f"  -> {ord(blocos[str(b)][i])} XOR {vetor_inicial[i]}")
             xor = ord(blocos[str(b)][i]) ^ vetor_inicial[i]  # Realiza XOR com o Vetor
-            cif = xor * chave[i]  # Cifragem
-            blocos_cif[b].append(chr(cif))
-        vetor_inicial = [ord(l) for l in blocos_cif[b]]  # Vetor Inicial recebe o bloco cifrado anteriormente
+            cif = (xor * chave[i]) % 256 # Cifragem
+            blocos_cif[b].append(cif)
+        vetor_inicial = [l for l in blocos_cif[b]]  # Vetor Inicial recebe o bloco cifrado anteriormente
     return blocos_cif
+
+
+def apresenta(cifra: dict) -> str:
+    out = str()
+    for b in cifra:
+        for l in cifra[b]:
+            out += l
+    return out
 
 
 if __name__ == "__main__":
@@ -58,4 +68,9 @@ if __name__ == "__main__":
     tamanho = len(msg)
     qnt_bytes_blc_incompl = tamanho % 8
 
-    print(f"Blocos: {cifra(chave, vetor_inicial, msg, qnt_bytes_blc_incompl)}")
+    cifragem = cifra(chave, vetor_inicial, msg, qnt_bytes_blc_incompl)
+
+    for b in cifragem:
+        for l in cifragem[b]:
+            print(f'{l}', end=' ')
+    print('\n')
