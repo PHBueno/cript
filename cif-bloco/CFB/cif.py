@@ -51,7 +51,7 @@ def cifra(vi: list, chave: list, msg: str, qntd_byte_bloco_incompl: int):
     for b in blocos:
         proximo_xor = [((vi[i] * chave[i]) % 256) for i in range(0, len(vi))]  # A cifragem é realizada no VI
         cifragem = [ord(blocos[b][i]) ^ proximo_xor[i] for i in range(0, len(blocos[b]))]  # Realiza XOR com o Bloco
-        vi = cifragem  # O vetor de inicialização é substituído pelo valor do bloco cifrado
+        vi = cifragem
         blocos[b] = cifragem
     return blocos
 
